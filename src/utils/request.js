@@ -1,6 +1,4 @@
 import axios from 'axios';
-import { MessageBox, Message } from 'element-ui'
-import router from "../router";
 
 const service = axios.create({
     // process.env.NODE_ENV === 'development' 来判断是否开发环境
@@ -10,7 +8,7 @@ const service = axios.create({
 })
 
 // request interceptor 请求拦截器
-service.interceptors.request.use( config => {
+service.interceptors.request.use(config => {
     // do something before request is sent
     if (localStorage.token) {
         // let each request carry token
@@ -25,15 +23,13 @@ service.interceptors.request.use( config => {
 })
 
 service.interceptors.response.use(response => {
-    if(response.status === 200){
-        if (response.data.code === 20001) {
-            router.replace('/')
-            console.log("token过期");
-        }
-        return response.data;
-    }else{
-        Promise.reject();
+    if (response.data.code === 20001) {
+        location.replace('/')
+        localStorage.removeItem('ms_username');
+        localStorage.removeItem('token');
+        console.log("token过期");
     }
+    return response;
 }, error => {
     console.log(error);
     return Promise.reject();

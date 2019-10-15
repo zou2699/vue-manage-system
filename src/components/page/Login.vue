@@ -59,17 +59,19 @@
                         service.post('/user/login', this.loginForm).then( res => {
                             this.loading = false
                             console.log(res)
-                            if (res.code === 20000) {
+                            if (res.data.code === 20000) {
                                 this.$message.success('登录成功');
                                 //全局存储token
                                 localStorage.setItem('ms_username', this.loginForm.username);
-                                localStorage.setItem('token', res.data.token);
+                                localStorage.setItem('token', res.data.data.token);
 
                                 this.$router.push('/')
                             } else {
                                 this.$message.error('账号或密码错误');
                             }
-                        }).catch(() => {
+                        }).catch( res => {
+                            // console.log('账号或密码错误')
+                            this.$message.error('账号或密码错误');
                             this.loading = false
                         })
                     } else {
