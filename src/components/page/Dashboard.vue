@@ -101,12 +101,18 @@
                 </el-card>
             </el-col>
         </el-row>
+
+        <div>
+            <el-button type="primary" style="width:100%;margin-bottom:30px;" @click="show">get tag</el-button>
+            <p>{{res}}</p>
+        </div>
     </div>
 </template>
 
 <script>
     import Schart from 'vue-schart';
     import bus from '../common/bus';
+    import service from "../../utils/request";
     export default {
         name: 'dashboard',
         data() {
@@ -180,7 +186,8 @@
                     bgColor: '#F5F8FD',
                     bottomPadding: 30,
                     topPadding: 30
-                }
+                },
+                res: 'message'
             }
         },
         components: {
@@ -223,6 +230,9 @@
             renderChart(){
                 this.$refs.bar.renderChart();
                 this.$refs.line.renderChart();
+            },
+            show() {
+                service.get('/api/v1/tags').then(res => (this.res = res.data))
             }
         }
     }
